@@ -1,3 +1,4 @@
 {
-  "mongoURI": "mongodb+srv://daniel123:daniel123@pvrentals.mlysn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  "mongoURI": "mongodb+srv://daniel123:daniel123@pvrentals.mlysn.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
+  "jwtSecret": "wololo"
 }
