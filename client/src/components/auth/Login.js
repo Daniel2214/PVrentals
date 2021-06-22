@@ -1,6 +1,12 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
+import { UserContext } from "../../state/UserContext";
+import setAuthToken from "../../utils/setAuthToken";
+import axios from "axios";
 
 const Login = () => {
+  const [token, clearSession, addSession, auth, addUser] =
+    useContext(UserContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -11,10 +17,37 @@ const Login = () => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+
+    const user = {
+      email,
+      password,
+    };
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const body = JSON.stringify(user);
+      await axios.post("/api/auth", body, config).then((res) => {
+        addSession(res.data.token);
+      });
+      const tokenExist = localStorage.token !== "null";
+      if (tokenExist) {
+        setAuthToken(localStorage.token);
+      }
+      await axios.get("/api/auth").then((res) => {
+        addUser(res.data);
+      });
+    } catch (error) {
+      console.log(error.response.data);
+    }
   };
+  if (auth.isAuthenticated) {
+    return <Redirect to="/properties" />;
+  }
 
   return (
     <Fragment>

@@ -1,5 +1,5 @@
 import './App.css';
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect, useContext} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
@@ -8,9 +8,34 @@ import Register from './components/auth/Register';
 import CreateProperty from './components/properties/CreateProperty';
 import Dashboard from './components/properties/Dashboard';
 import Property from './components/properties/Property';
+import setAuthToken from './utils/setAuthToken';
+import axios from 'axios';
+import { UserContext } from "./state/UserContext";
 
+
+const tokenExist = localStorage.token !== "null";
+
+
+if(tokenExist) {
+  setAuthToken(localStorage.token)
+}
 
 const App = () => {
+
+  const [token, clearSession, addSession, auth, addUser] = useContext(UserContext);
+
+
+  useEffect(()=>{
+    async function fetchMyAPI() {
+      if (tokenExist) {
+        await axios.get('/api/auth').then((res) => {
+          addUser(res.data);
+        });
+      }
+    }
+    fetchMyAPI();
+  }, []);
+
   return (
       <Router>
         <Fragment>
