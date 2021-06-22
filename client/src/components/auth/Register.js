@@ -1,28 +1,18 @@
-import React, {Fragment} from 'react'
-
+import React, { Fragment } from "react";
 
 const Register = () => {
-
   return (
     <Fragment>
-     <h1 className="large text-primary">Sign Up</h1>
-      <p className="lead"><i className="fas fa-user"></i> Create Your Account</p>
-      <form className="form" onSubmit={e => console.log(e)}>
+      <h1 className="large text-primary">Sign Up</h1>
+      <p className="lead">
+        <i className="fas fa-user"></i> Create Your Account
+      </p>
+      <form className="form" onSubmit={(e) => console.log(e)}>
         <div className="form-group">
-          <input 
-            type="text" 
-            placeholder="Name" 
-            name="name" 
-            
-          />
+          <input type="text" placeholder="Name" name="name" />
         </div>
         <div className="form-group">
-          <input 
-            type="email" 
-            placeholder="Email Address" 
-            name="email" 
-             
-          />
+          <input type="email" placeholder="Email Address" name="email" />
         </div>
         <div className="form-group">
           <input
@@ -40,10 +30,12 @@ const Register = () => {
             minLength="6"
           />
         </div>
-        <input type="submit" className="btn btn-primary" value="Register" />
+        <button type="submit" className="btn btn-primary">
+          Register
+        </button>
       </form>
     </Fragment>
-  )
-}
+  );
+};
 
-export default Register
+export default Register;
