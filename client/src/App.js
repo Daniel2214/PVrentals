@@ -1,25 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import React, {Fragment} from 'react';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Navbar from './components/layout/Navbar';
+import Landing from './components/layout/Landing';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import CreateProperty from './components/properties/CreateProperty';
+import Dashboard from './components/properties/Dashboard';
+import Property from './components/properties/Property';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      <Router>
+        <Fragment>
+          <Navbar />
+          <Route exact path='/' component={ Landing } />
+          <section className="container">
+            <Switch>
+              <Route exact path='/login' component={ Login } />
+              <Route exact path='/register' component={ Register } />
+              <Route exact path='/properties' component={ Dashboard } />
+              <Route exact path='/property' component={ Property } />
+              <Route exact path='/properties/create' component={ CreateProperty } />
+            </Switch>
+          </section>
+        </Fragment>
+      </Router>
+  )
 }
 
 export default App;
