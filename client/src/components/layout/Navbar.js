@@ -1,26 +1,21 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
-import { UserContext } from "../../state/UserContext";
-import LoginButton from "../auth/LoginButton";
 import LogoutButton from "../auth/LogoutButton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
-  const logout = () => {
-    // clearSession();
-    // removeUser();
-  };
+  const { user, isAuthenticated, isLoading } = useAuth0();
+
+  const name = isAuthenticated && user ? user.name : "";
 
   const authLinks = (
     <ul>
-      <li style={{ marginRight: "3rem" }}>Welcome </li>
+      <li style={{ marginRight: "3rem" }}>Welcome {name}</li>
       <li>
         <Link to="/properties">Properties</Link>
       </li>
       <li>
-        <a onClick={logout} href="#!">
-          <i className="fas fa-sign-out-alt"></i>{" "}
-          <span className="hide-sm">Logout</span>
-        </a>
+        <LogoutButton />
       </li>
     </ul>
   );
@@ -30,21 +25,19 @@ const Navbar = () => {
       <li>
         <Link to="/properties">Properties</Link>
       </li>
-      <li>
-        <LoginButton />
-      </li>
-      <li>
-        <LogoutButton />
-      </li>
     </ul>
   );
+
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
     <nav className="navbar bg-dark">
       <h1>
         <Link to="/">PV Real Estate</Link>
       </h1>
-      <Fragment>{false ? authLinks : guestLinks}</Fragment>
+      <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
     </nav>
   );
 };
