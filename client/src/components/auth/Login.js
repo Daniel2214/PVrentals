@@ -5,8 +5,6 @@ import setAuthToken from "../../utils/setAuthToken";
 import axios from "axios";
 
 const Login = () => {
-  const [token, clearSession, addSession, auth, addUser] =
-    useContext(UserContext);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -31,23 +29,18 @@ const Login = () => {
         },
       };
       const body = JSON.stringify(user);
-      await axios.post("/api/auth", body, config).then((res) => {
-        addSession(res.data.token);
-      });
+      await axios.post("/api/auth", body, config).then((res) => {});
       const tokenExist = localStorage.token !== "null";
       if (tokenExist) {
-        setAuthToken(localStorage.token);
       }
-      await axios.get("/api/auth").then((res) => {
-        addUser(res.data);
-      });
+      await axios.get("/api/auth").then((res) => {});
     } catch (error) {
       console.log(error.response.data);
     }
   };
-  if (auth.isAuthenticated) {
-    return <Redirect to="/properties" />;
-  }
+  // if (auth.isAuthenticated) {
+  //   return <Redirect to="/properties" />;
+  // }
 
   return (
     <Fragment>
