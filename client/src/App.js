@@ -7,6 +7,7 @@ import CreateProperty from "./components/properties/CreateProperty";
 import Dashboard from "./components/properties/Dashboard";
 import Property from "./components/properties/Property";
 import setAuthToken from "./utils/setAuthToken";
+import PrivateRoute from "./components/routing/PrivateRoute";
 
 const tokenExist = localStorage.token !== "null";
 
@@ -24,7 +25,11 @@ const App = () => {
           <Switch>
             <Route exact path="/properties" component={Dashboard} />
             <Route exact path="/property" component={Property} />
-            <Route exact path="/properties/create" component={CreateProperty} />
+            <PrivateRoute
+              exact
+              path="/properties/create"
+              component={CreateProperty}
+            />
           </Switch>
         </section>
       </Fragment>

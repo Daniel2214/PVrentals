@@ -12,6 +12,9 @@ const Navbar = () => {
     <ul>
       <li style={{ marginRight: "3rem" }}>Welcome {name}</li>
       <li>
+        <Link to="/properties/create">Create new property</Link>
+      </li>
+      <li>
         <Link to="/properties">Properties</Link>
       </li>
       <li>
