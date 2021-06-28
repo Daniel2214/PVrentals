@@ -3,20 +3,14 @@ import { Route, Redirect } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { isAuthenticated, isLoading } = useAuth0();
+  const { isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
 
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        !isLoading || isAuthenticated ? (
-          <Component {...props} />
-        ) : (
-          <Redirect to="/" />
-        )
-      }
-    />
-  );
+  if (!isLoading && !isAuthenticated) {
+    loginWithRedirect();
+    return null;
+  }
+
+  return <Route {...rest} render={(props) => <Component {...props} />} />;
 };
 
 export default PrivateRoute;
