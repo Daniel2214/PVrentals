@@ -13,6 +13,7 @@
   "author": "Daniel Jimenez",
   "license": "MIT",
   "dependencies": {
+    "@auth0/auth0-react": "^1.5.0",
     "bcryptjs": "^2.4.3",
     "config": "^3.3.6",
     "express": "^4.17.1",

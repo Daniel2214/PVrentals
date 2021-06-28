@@ -1,45 +1,48 @@
-import React, {Fragment, useContext} from 'react'
-import {Link} from 'react-router-dom';
-import { UserContext } from "../../state/UserContext";
-
+import React, { Fragment } from "react";
+import { Link } from "react-router-dom";
+import LogoutButton from "../auth/LogoutButton";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
-  const [token, clearSession, addSession, auth, addUser, removeUser] = useContext(UserContext);
-
-  const logout = () => {
-    clearSession();
-    removeUser();
-  }
+  const name = isAuthenticated && user ? user.name : "";
 
   const authLinks = (
     <ul>
-      <li style={{marginRight: '3rem'}}>Welcome {auth.user.name}</li>
-      <li><Link to='/properties'>Properties</Link></li>  
+      <li style={{ marginRight: "3rem" }}>Welcome {name}</li>
       <li>
-        <a onClick={logout} href='#!'>
-          <i className='fas fa-sign-out-alt'></i> {' '}
-          <span className="hide-sm">Logout</span>
-        </a>
+        <Link to="/properties/create">Create new property</Link>
+      </li>
+      <li>
+        <Link to="/properties">Properties</Link>
+      </li>
+      <li>
+        <LogoutButton />
       </li>
     </ul>
   );
 
   const guestLinks = (
-    <ul>  
-      <li><Link to='/properties'>Properties</Link></li>   
-      <li><Link to='/login'>Login</Link></li>
+    <ul>
+      <li>
+        <Link to="/properties">Properties</Link>
+      </li>
     </ul>
   );
+
+  if (isLoading) {
+    return <div></div>;
+  }
 
   return (
     <nav className="navbar bg-dark">
       <h1>
-        <Link to='/'>PV Real Estate</Link>
+        <Link to="/">PV Real Estate</Link>
       </h1>
-      <Fragment>{auth.isAuthenticated ? authLinks : guestLinks}</Fragment>
+      <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
     </nav>
-  )
-}
+  );
+};
 
 export default Navbar;
