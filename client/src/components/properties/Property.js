@@ -1,16 +1,15 @@
 import React, { Fragment } from "react";
-import SimpleImageSlider from "react-simple-image-slider";
 
 const Property = () => {
-  const images = [
-    { url: "https://tropicasa.com/images/photos/1609/B71-1609.jpg" },
-    {
-      url: "https://www.davidpullenproperties.com/wp-content/uploads/2014/08/gringo-gulch.jpg",
-    },
-    {
-      url: "https://www.puntademita-realestate.com/wp-content/uploads/2014/12/kristy-00002.jpg",
-    },
-  ];
+  // const images = [
+  //   { url: "https://tropicasa.com/images/photos/1609/B71-1609.jpg" },
+  //   {
+  //     url: "https://www.davidpullenproperties.com/wp-content/uploads/2014/08/gringo-gulch.jpg",
+  //   },
+  //   {
+  //     url: "https://www.puntademita-realestate.com/wp-content/uploads/2014/12/kristy-00002.jpg",
+  //   },
+  // ];
 
   return (
     <Fragment>
@@ -55,6 +54,7 @@ const Property = () => {
             <div style={{ width: "100%", display: "flex" }}>
               <div style={{ margin: "0 auto", width: "50%" }}>
                 <img
+                  alt="temporal (slider)"
                   src="https://tropicasa.com/images/photos/1609/B71-1609.jpg"
                   width="50%"
                   height="400px"
