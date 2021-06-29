@@ -6,7 +6,7 @@ const Property = require("../../models/Property");
 
 // @route   POST api/properties
 // @desc    Create a property
-// @access  Private (public by the moment)
+// @access  Private
 
 router.post(
   "/",
