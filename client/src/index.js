@@ -9,6 +9,7 @@ ReactDOM.render(
       domain="dev-jmmtxc75.us.auth0.com"
       clientId="CzgUj945q6EXWZQMq7ODFDIUcXZTi09c"
       redirectUri={window.location.origin}
+      audience="https://jmzpvrentals/api"
     >
       <App />
     </Auth0Provider>
