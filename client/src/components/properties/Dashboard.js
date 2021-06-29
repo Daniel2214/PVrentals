@@ -1,27 +1,47 @@
-import React, {Fragment} from 'react'
-import {Link} from 'react-router-dom';
-
+import React, { Fragment, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Dashboard = () => {
+  const { isAuthenticated } = useAuth0();
+  const [properties, setProperties] = useState([]);
 
-  const properties = [1, 2, 3, 4];
+  useEffect(() => {
+    axios.get("/api/properties").then((res) => {
+      setProperties(res.data);
+    });
+  }, []);
+
+  const deleteButton = (
+    <button className="btn btn-danger delete">Delete</button>
+  );
 
   return (
     <Fragment>
       <h1 className="large text-primary">Properties</h1>
       <div className="properties">
-        {properties.map(property => (
-          <div className="property bg-light">
+        {properties.map((property) => (
+          <div className="property bg-light" key={property._id}>
             <img
               src="https://tropicasa.com/images/photos/1609/B71-1609.jpg"
               alt=""
             />
             <div>
-              <h2>House in El Tigre</h2>
-              <p>El Tigre, Nuevo Vallarta</p>
-              <p>Rent for 1600 dlls</p>
-              <p>For 1 year</p>
-              <Link to="/property" className="btn btn-primary viewMore">View More</Link>
+              <h3>{property.title}</h3>
+              <p>{property.location}</p>
+              <p>{`${property.status} for $${property.price} ${property.currency}`}</p>
+              {property.status === "Rent" ? (
+                <p>For {property.period}</p>
+              ) : (
+                <p></p>
+              )}
+              <Link
+                to={`/property/${property._id}`}
+                className="btn btn-primary viewMore"
+              >
+                View More
+              </Link>
             </div>
 
             <ul>
@@ -51,15 +71,13 @@ const Dashboard = () => {
               <li className="text-primary">
                 <i className="fas fa-envelope"></i> d@test.com
               </li>
-              <button className="btn btn-danger delete">
-                Delete
-              </button>
+              {isAuthenticated ? deleteButton : <div></div>}
             </ul>
           </div>
         ))}
       </div>
     </Fragment>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default Dashboard;

@@ -17,7 +17,7 @@ const App = () => {
         <section className="container">
           <Switch>
             <Route exact path="/properties" component={Dashboard} />
-            <Route exact path="/property" component={Property} />
+            <Route exact path="/property/:id" component={Property} />
             <PrivateRoute
               exact
               path="/properties/create"
