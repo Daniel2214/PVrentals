@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
 
 const Dashboard = () => {
-  const { isAuthenticated } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
   const [properties, setProperties] = useState([]);
 
   useEffect(() => {
@@ -13,8 +13,23 @@ const Dashboard = () => {
     });
   }, []);
 
-  const deleteButton = (
-    <button className="btn btn-danger delete">Delete</button>
+  const onDelete = async (id) => {
+    const token = await getAccessTokenSilently();
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios.delete(`/api/properties/${id}`, config).then(() => {
+      return window.location.reload();
+    });
+  };
+
+  const deleteButton = (id) => (
+    <button className="btn btn-danger delete" onClick={() => onDelete(id)}>
+      Delete
+    </button>
   );
 
   return (
@@ -32,7 +47,7 @@ const Dashboard = () => {
               <p>{property.location}</p>
               <p>{`${property.status} for $${property.price} ${property.currency}`}</p>
               {property.status === "Rent" ? (
-                <p>For {property.period}</p>
+                <p>Per {property.period}</p>
               ) : (
                 <p></p>
               )}
@@ -71,7 +86,7 @@ const Dashboard = () => {
               <li className="text-primary">
                 <i className="fas fa-envelope"></i> d@test.com
               </li>
-              {isAuthenticated ? deleteButton : <div></div>}
+              {isAuthenticated ? deleteButton(property._id) : <div></div>}
             </ul>
           </div>
         ))}

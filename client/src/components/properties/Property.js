@@ -1,4 +1,6 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState, useEffect } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const Property = () => {
   // const images = [
@@ -11,15 +13,28 @@ const Property = () => {
   //   },
   // ];
 
+  const [property, setProperty] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    axios.get(`/api/properties/${id}`).then((res) => {
+      setProperty(res.data);
+    });
+  }, [id]);
+
   return (
     <Fragment>
-      <h1 className="large text-primary colMarginTitle">House in El Tigre</h1>
+      <h1 className="large text-primary colMarginTitle">{property.title}</h1>
       <div className="properties">
         <div className="gridMainProperty bg-light">
           <div className="colMainProperty colMarginLeft">
-            <p>El Tigre, Nuevo Vallarta</p>
-            <p>Rent for 1600 dlls</p>
-            <p>For 1 year</p>
+            <p>Location: {property.location}</p>
+            <p>{`${property.status}: ${property.price} ${property.currency}`}</p>
+            {property.status === "Rent" ? (
+              <p>Per {property.period}</p>
+            ) : (
+              <p></p>
+            )}
           </div>
 
           <ul className="colMainProperty colMarginLeft">
@@ -47,7 +62,7 @@ const Property = () => {
               <i className="fa fa-facebook"></i> Facebook link
             </li>
             <li className="text-primary">
-              <i className="fas fa-envelope"></i> d@test.com
+              <i className="fas fa-envelope"></i> {property.user}
             </li>
           </ul>
           <div className="colMainProperty">

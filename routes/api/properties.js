@@ -68,4 +68,46 @@ router.get("/", async (req, res) => {
   }
 });
 
+// @route   GET api/properties/:id
+// @desc    GET property by id
+// @access  Public
+router.get("/:id", async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+
+    if (!property) {
+      return res.status(400).json({ msg: "Property not found" });
+    }
+    res.send(property);
+  } catch (err) {
+    if (err.kind == "ObjectId") {
+      return res.status(400).json({ msg: "Property not found" });
+    }
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+});
+
+// @route   DELETE api/properties/:id
+// @desc    GET property by id
+// @access  Public
+router.delete("/:id", jwtCheck, async (req, res) => {
+  try {
+    const property = await Property.findById(req.params.id);
+
+    if (!property) {
+      return res.status(400).json({ msg: "Property not found" });
+    }
+
+    await property.remove();
+    res.json({ msg: "Property removed" });
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind == "ObjectId") {
+      return res.status(400).json({ msg: "Property not found" });
+    }
+    res.status(500).send("Server error");
+  }
+});
+
 module.exports = router;

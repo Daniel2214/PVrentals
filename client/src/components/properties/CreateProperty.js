@@ -21,7 +21,6 @@ const CreateProperty = () => {
     values.user = user.email;
     const body = JSON.stringify(values);
     await axios.post("/api/properties", body, config).then((res) => {
-      console.log(res.data);
       return history.push("/properties");
     });
   };
