@@ -60,31 +60,32 @@ const Dashboard = () => {
             </div>
 
             <ul>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> 14 rooms
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> Private Pool
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> 3 parking spots
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> Bathroom in each bedroom
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> Security 24 hrs
-              </li>
+              {property.description.map((description) => (
+                <li className="text-primary">
+                  <i className="fas fa-minus"></i> {description}
+                </li>
+              ))}
             </ul>
             <ul>
               <li className="text-primary">
-                <i className="fas fa-phone"></i> 321313213
+                <i className="fas fa-phone"></i> 322-102-2204
               </li>
+              {property.fbLink ? (
+                <li className="text-primary">
+                  <i className="fa fa-facebook"></i>{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={property.fbLink}
+                  >
+                    Facebook
+                  </a>
+                </li>
+              ) : (
+                <div></div>
+              )}
               <li className="text-primary">
-                <i className="fa fa-facebook"></i> Facebook link
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-envelope"></i> d@test.com
+                <i className="fas fa-envelope"></i> {property.user}
               </li>
               {isAuthenticated ? deleteButton(property._id) : <div></div>}
             </ul>

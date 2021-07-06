@@ -111,6 +111,14 @@ const CreateProperty = () => {
               )}
             </Field>
             {values && values.status === "Rent" ? periodQuestion : <div></div>}
+            <Field name="fbLink">
+              {({ input, meta }) => (
+                <div>
+                  <label>Facebook link</label>
+                  <input {...input} type="text" />
+                </div>
+              )}
+            </Field>
             <div>
               <label>Description</label>
               <Field name="description" component="textarea" />
