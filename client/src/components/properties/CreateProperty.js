@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Field } from "react-final-form";
 import Styles from "./Styles";
 import ImageUploader from "react-images-upload";
 import axios from "axios";
+import S3 from "react-aws-s3";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory } from "react-router-dom";
 
 const CreateProperty = () => {
   const { getAccessTokenSilently, user } = useAuth0();
+  const [images, setImages] = useState();
   const history = useHistory();
+
+  const config = {
+    bucketName: "pvrentals",
+    region: "us-east-2",
+    accessKeyId: "AKIAQPAA2ZU6SHVPDTRE",
+    secretAccessKey: "K4Yxspak0/P/b+U9OfmseweKpAfkMf1dmPmfKO9E",
+  };
+
+  const handleUpload = async (file) => {
+    let newFileName = file.name.replace(/\..+$/, "");
+    const ReactS3Client = new S3(config);
+    let dataKey;
+    await ReactS3Client.uploadFile(file, newFileName).then((data) => {
+      if (data.status === 204) {
+        dataKey = data.key;
+      } else {
+        dataKey = "image error";
+      }
+    });
+    return dataKey;
+  };
 
   const onSubmit = async (values) => {
     const token = await getAccessTokenSilently();
@@ -19,6 +42,11 @@ const CreateProperty = () => {
       },
     };
     values.user = user.email;
+    values.images = [];
+    for (let i = 0; i < images.length; i++) {
+      let imageKey = await handleUpload(images[i]);
+      values.images.push(imageKey);
+    }
     const body = JSON.stringify(values);
     await axios.post("/api/properties", body, config).then((res) => {
       return history.push("/properties");
@@ -26,7 +54,7 @@ const CreateProperty = () => {
   };
 
   const onDrop = (picture) => {
-    console.log(picture);
+    setImages(picture);
   };
 
   const required = (value) => (value ? undefined : "Required");

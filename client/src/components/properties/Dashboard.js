@@ -13,6 +13,20 @@ const Dashboard = () => {
     });
   }, []);
 
+  const removeFromArray = (id) => {
+    let index = 0;
+    let deletePropertyIndex;
+    properties.forEach((property) => {
+      if (property._id === id) {
+        deletePropertyIndex = index;
+      }
+      index++;
+    });
+    if (deletePropertyIndex > -1) {
+      properties.splice(deletePropertyIndex, 1);
+    }
+  };
+
   const onDelete = async (id) => {
     const token = await getAccessTokenSilently();
     const config = {
@@ -22,6 +36,7 @@ const Dashboard = () => {
       },
     };
     await axios.delete(`/api/properties/${id}`, config).then(() => {
+      removeFromArray(id);
       return window.location.reload();
     });
   };

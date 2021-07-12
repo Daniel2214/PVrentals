@@ -37,6 +37,7 @@ router.post(
         currency: req.body.currency,
         period: req.body.period,
         fbLink: req.body.fbLink,
+        images: req.body.images,
       };
 
       if (req.body.description) {

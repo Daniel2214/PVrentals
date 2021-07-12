@@ -3,7 +3,6 @@ import React, { useState } from "react";
 const ImageSlider = ({ images }) => {
   // takes in images as props
   const [index, setIndex] = useState(0); // create state to keep track of images index, set the default index to 0
-  console.log(images);
   const slideRight = () => {
     setIndex((index + 1) % images.length); // increases index by 1
   };
