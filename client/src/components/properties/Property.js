@@ -4,23 +4,20 @@ import ImageSlider from "../imageSlider/ImageSlider";
 import { useParams } from "react-router-dom";
 
 const Property = () => {
-  const images = [
-    { url: "https://tropicasa.com/images/photos/1609/B71-1609.jpg" },
-    {
-      url: "https://www.davidpullenproperties.com/wp-content/uploads/2014/08/gringo-gulch.jpg",
-    },
-    {
-      url: "https://www.puntademita-realestate.com/wp-content/uploads/2014/12/kristy-00002.jpg",
-    },
-  ];
-
   const [property, setProperty] = useState(undefined);
+  const [images, setImages] = useState([]);
   const { id } = useParams();
 
   useEffect(() => {
     axios.get(`/api/properties/${id}`).then((res) => {
-      console.log(res.data);
       setProperty(res.data);
+      const tempImages = [];
+      res.data.images.forEach((image) => {
+        tempImages.push({
+          url: `https://pvrentals.s3.us-east-2.amazonaws.com/${image}`,
+        });
+      });
+      setImages(tempImages);
     });
   }, [id]);
 

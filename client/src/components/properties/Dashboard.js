@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { deleteFile } from "../../aws/s3";
 
 const Dashboard = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -13,18 +14,14 @@ const Dashboard = () => {
     });
   }, []);
 
-  const removeFromArray = (id) => {
-    let index = 0;
-    let deletePropertyIndex;
+  const removeImages = async (id) => {
     properties.forEach((property) => {
       if (property._id === id) {
-        deletePropertyIndex = index;
+        for (let i = 0; i < property.images.length; i++) {
+          deleteFile(property.images[i]);
+        }
       }
-      index++;
     });
-    if (deletePropertyIndex > -1) {
-      properties.splice(deletePropertyIndex, 1);
-    }
   };
 
   const onDelete = async (id) => {
@@ -35,8 +32,8 @@ const Dashboard = () => {
         Authorization: `Bearer ${token}`,
       },
     };
+    await removeImages(id);
     await axios.delete(`/api/properties/${id}`, config).then(() => {
-      removeFromArray(id);
       return window.location.reload();
     });
   };
@@ -54,7 +51,7 @@ const Dashboard = () => {
         {properties.map((property) => (
           <div className="property bg-light" key={property._id}>
             <img
-              src="https://tropicasa.com/images/photos/1609/B71-1609.jpg"
+              src={`https://pvrentals.s3.us-east-2.amazonaws.com/${property.images[0]}`}
               alt=""
             />
             <div>
