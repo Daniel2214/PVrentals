@@ -28,6 +28,9 @@ const PropertySchema = new mongoose.Schema({
   period: {
     type: String,
   },
+  fbLink: {
+    type: String,
+  },
   description: {
     type: [String],
   },

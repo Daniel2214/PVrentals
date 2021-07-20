@@ -2,6 +2,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth0 } from "@auth0/auth0-react";
+import { deleteFile } from "../../aws/s3";
 
 const Dashboard = () => {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
@@ -13,6 +14,16 @@ const Dashboard = () => {
     });
   }, []);
 
+  const removeImages = async (id) => {
+    properties.forEach((property) => {
+      if (property._id === id) {
+        for (let i = 0; i < property.images.length; i++) {
+          deleteFile(property.images[i]);
+        }
+      }
+    });
+  };
+
   const onDelete = async (id) => {
     const token = await getAccessTokenSilently();
     const config = {
@@ -21,6 +32,7 @@ const Dashboard = () => {
         Authorization: `Bearer ${token}`,
       },
     };
+    await removeImages(id);
     await axios.delete(`/api/properties/${id}`, config).then(() => {
       return window.location.reload();
     });
@@ -39,7 +51,7 @@ const Dashboard = () => {
         {properties.map((property) => (
           <div className="property bg-light" key={property._id}>
             <img
-              src="https://tropicasa.com/images/photos/1609/B71-1609.jpg"
+              src={`https://pvrentals.s3.us-east-2.amazonaws.com/${property.images[0]}`}
               alt=""
             />
             <div>
@@ -60,31 +72,32 @@ const Dashboard = () => {
             </div>
 
             <ul>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> 14 rooms
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> Private Pool
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> 3 parking spots
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> Bathroom in each bedroom
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-minus"></i> Security 24 hrs
-              </li>
+              {property.description.map((description) => (
+                <li className="text-primary">
+                  <i className="fas fa-minus"></i> {description}
+                </li>
+              ))}
             </ul>
             <ul>
               <li className="text-primary">
-                <i className="fas fa-phone"></i> 321313213
+                <i className="fas fa-phone"></i> 322-102-2204
               </li>
+              {property.fbLink ? (
+                <li className="text-primary">
+                  <i className="fa fa-facebook"></i>{" "}
+                  <a
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    href={property.fbLink}
+                  >
+                    Facebook
+                  </a>
+                </li>
+              ) : (
+                <div></div>
+              )}
               <li className="text-primary">
-                <i className="fa fa-facebook"></i> Facebook link
-              </li>
-              <li className="text-primary">
-                <i className="fas fa-envelope"></i> d@test.com
+                <i className="fas fa-envelope"></i> {property.user}
               </li>
               {isAuthenticated ? deleteButton(property._id) : <div></div>}
             </ul>

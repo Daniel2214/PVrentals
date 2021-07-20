@@ -36,6 +36,8 @@ router.post(
         price: req.body.price,
         currency: req.body.currency,
         period: req.body.period,
+        fbLink: req.body.fbLink,
+        images: req.body.images,
       };
 
       if (req.body.description) {

@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { Form, Field } from "react-final-form";
 import Styles from "./Styles";
 import ImageUploader from "react-images-upload";
 import axios from "axios";
+import { handleUpload } from "../../aws/s3";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useHistory } from "react-router-dom";
 
 const CreateProperty = () => {
   const { getAccessTokenSilently, user } = useAuth0();
+  const [images, setImages] = useState();
   const history = useHistory();
 
   const onSubmit = async (values) => {
@@ -19,6 +21,11 @@ const CreateProperty = () => {
       },
     };
     values.user = user.email;
+    values.images = [];
+    for (let i = 0; i < images.length; i++) {
+      let imageKey = await handleUpload(images[i]);
+      values.images.push(imageKey);
+    }
     const body = JSON.stringify(values);
     await axios.post("/api/properties", body, config).then((res) => {
       return history.push("/properties");
@@ -26,7 +33,7 @@ const CreateProperty = () => {
   };
 
   const onDrop = (picture) => {
-    console.log(picture);
+    setImages(picture);
   };
 
   const required = (value) => (value ? undefined : "Required");
@@ -111,6 +118,14 @@ const CreateProperty = () => {
               )}
             </Field>
             {values && values.status === "Rent" ? periodQuestion : <div></div>}
+            <Field name="fbLink">
+              {({ input, meta }) => (
+                <div>
+                  <label>Facebook link</label>
+                  <input {...input} type="text" />
+                </div>
+              )}
+            </Field>
             <div>
               <label>Description</label>
               <Field name="description" component="textarea" />
@@ -120,7 +135,7 @@ const CreateProperty = () => {
                 withIcon={false}
                 buttonText="Choose images"
                 onChange={onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
                 maxFileSize={5242880}
                 withPreview={true}
               />
