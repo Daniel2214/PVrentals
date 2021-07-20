@@ -135,7 +135,7 @@ const CreateProperty = () => {
                 withIcon={false}
                 buttonText="Choose images"
                 onChange={onDrop}
-                imgExtension={[".jpg", ".gif", ".png", ".gif"]}
+                imgExtension={[".jpg", ".gif", ".png", ".gif", ".jpeg"]}
                 maxFileSize={5242880}
                 withPreview={true}
               />

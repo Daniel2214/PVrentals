@@ -3,8 +3,8 @@ import S3 from "react-aws-s3";
 const config = {
   bucketName: "pvrentals",
   region: "us-east-2",
-  accessKeyId: "AKIAQPAA2ZU65HH2FRXC",
-  secretAccessKey: "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",
+  accessKeyId: process.env.REACT_APP_AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.REACT_APP_AWS_SECRET_ACCESS_KEY,
 };
 
 const ReactS3Client = new S3(config);
