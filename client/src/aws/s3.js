@@ -11,6 +11,7 @@ const ReactS3Client = new S3(config);
 
 export const handleUpload = async (file) => {
   let newFileName = file.name.replace(/\..+$/, "");
+  console.log(config);
   let dataKey;
   await ReactS3Client.uploadFile(file, newFileName).then((data) => {
     if (data.status === 204) {
